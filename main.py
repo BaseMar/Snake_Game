@@ -1,57 +1,52 @@
 import pygame
+from food import Food
+from snake import Snake
+from scoreboard import Scoreboard
 
 pygame.init()
 pygame.display.set_caption('Snake Game')
-game_window = pygame.display.set_mode((600, 600))
+WINDOW_SIZE = (600, 600)
+game_window = pygame.display.set_mode(WINDOW_SIZE)
 fps = pygame.time.Clock()
 
-snake_position = [100, 50]
-snake_body = [[100, 50], [90, 50], [80, 50]]
 snake_speed = 30
 direction = 'RIGHT'
 change_to = direction
+
+snake = Snake()
+food = Food()
+score = Scoreboard()
 
 game_is_on = True
 
 while game_is_on:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                change_to = 'UP'
-            if event.key == pygame.K_DOWN:
-                change_to = 'DOWN'
-            if event.key == pygame.K_LEFT:
-                change_to = 'LEFT'
-            if event.key == pygame.K_RIGHT:
-                change_to = 'RIGHT'
-        if event.type == pygame.QUIT:
+            snake.change_direction(event)
+        elif event.type == pygame.QUIT:
             game_is_on = False
 
-    if change_to == 'UP' and direction != 'DOWN':
-        direction = 'UP'
-    if change_to == 'DOWN' and direction != 'UP':
-        direction = 'DOWN'
-    if change_to == 'LEFT' and direction != 'RIGHT':
-        direction = 'LEFT'
-    if change_to == 'RIGHT' and direction != 'LEFT':
-        direction = 'RIGHT'
+    snake.move()
+    snake.draw(game_window)
+    food.draw(game_window)
+    score.show_score(game_window)
 
-        # Moving Snake
-    if direction == 'UP':
-        snake_position[1] -= 10
-    if direction == 'DOWN':
-        snake_position[1] += 10
-    if direction == 'LEFT':
-        snake_position[0] -= 10
-    if direction == 'RIGHT':
-        snake_position[0] += 10
+    # Game over conditions
+    if snake.starting_position[0] < 0 or snake.starting_position[0] >= WINDOW_SIZE[0] or snake.starting_position[1] < 0 or snake.starting_position[1] >= WINDOW_SIZE[1]:
+        score.game_over(game_window)
 
-    snake_body.insert(0, list(snake_position))
+    for block in snake.body[1:]:
+        if snake.starting_position[0] == block[0] and snake.starting_position[1] == block[1]:
+            score.game_over(game_window)
 
-    game_window.fill("black")
-
-    for pos in snake_body:
-        pygame.draw.rect(game_window, "white", pygame.Rect(pos[0], pos[1], 10, 10))
+    # Detect collision with food
+    snake.body.insert(0, list(snake.starting_position))
+    if snake.starting_position[0] == food.position[0] and snake.starting_position[1] == food.position[1]:
+        snake.body.insert(0, list(snake.starting_position))
+        score.score += 1
+        food = Food()
+    else:
+        snake.body.pop()
 
     pygame.display.update()
     fps.tick(snake_speed)
