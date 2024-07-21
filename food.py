@@ -9,3 +9,6 @@ class Food:
 
     def draw(self, surface):
         pygame.draw.rect(surface, "red", pygame.Rect(self.position[0], self.position[1], 10, 10))
+
+    def reset(self):
+        self.__init__()

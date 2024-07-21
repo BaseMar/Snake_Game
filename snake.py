@@ -39,6 +39,8 @@ class Snake:
             self.change_to = 'RIGHT'
 
     def draw(self, surface):
-        surface.fill("black")
         for pos in self.body:
             pygame.draw.rect(surface, "white", pygame.Rect(pos[0], pos[1], MOVE_DISTANCE, MOVE_DISTANCE))
+
+    def reset(self):
+        self.__init__()
