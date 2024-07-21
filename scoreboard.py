@@ -4,9 +4,10 @@ import pygame
 class Scoreboard:
     def __init__(self):
         self.score = 0
-        self.high_score = 0
         self.font = pygame.font.SysFont('times new roman', 30)
         self.color = "white"
+        with open("data.txt") as data:
+            self.high_score = int(data.read())
 
     def show_score(self, surface):
         score_surface = self.font.render(f"Score: {self.score}", True, self.color)
@@ -22,12 +23,14 @@ class Scoreboard:
         game_over_rect = game_over_surface.get_rect(center=(600 // 2, 600 // 3))
         surface.blit(game_over_surface, game_over_rect)
         pygame.display.flip()
-        time.sleep(2)
+        time.sleep(1)
         self.reset_game(snake, food)
 
     def reset_game(self, snake, food):
         if self.score > self.high_score:
             self.high_score = self.score
+            with open("data.txt", mode="w") as data:
+                data.write(f"{self.high_score}")
         self.score = 0
         snake.reset()
         food.reset()
