@@ -1,7 +1,5 @@
 import random
-
 import pygame
-
 
 class Food:
     def __init__(self):
@@ -11,4 +9,4 @@ class Food:
         pygame.draw.rect(surface, "red", pygame.Rect(self.position[0], self.position[1], 10, 10))
 
     def reset(self):
-        self.__init__()
+        self.position = [random.randrange(1, (600 // 10)) * 10, random.randrange(1, (600 // 10)) * 10]

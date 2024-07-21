@@ -41,13 +41,13 @@ while game_is_on:
             score.game_over(game_window, snake, food)
 
     # Detect collision with food
-    snake.body.insert(0, list(snake.starting_position))
     if snake.starting_position[0] == food.position[0] and snake.starting_position[1] == food.position[1]:
         snake.body.insert(0, list(snake.starting_position))
         score.score += 1
         food = Food()
     else:
         snake.body.pop()
+        snake.body.insert(0, list(snake.starting_position))
 
     pygame.display.update()
     fps.tick(snake_speed)

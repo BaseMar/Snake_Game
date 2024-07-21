@@ -2,10 +2,11 @@ import pygame
 
 STARTING_POSITION = [100, 50]
 MOVE_DISTANCE = 10
+
 class Snake:
     def __init__(self):
         self.body = [[100, 50], [90, 50], [80, 50]]
-        self.starting_position = STARTING_POSITION
+        self.starting_position = STARTING_POSITION[:]
         self.direction = 'RIGHT'
         self.change_to = self.direction
 
