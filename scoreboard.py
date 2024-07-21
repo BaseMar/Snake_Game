@@ -9,9 +9,13 @@ class Scoreboard:
         self.color = "white"
 
     def show_score(self, surface):
-        score_surface = self.font.render(f'Score: {self.score}', True, self.color)
-        score_rect = score_surface.get_rect(center=(600 // 2, 30))
+        score_surface = self.font.render(f"Score: {self.score}", True, self.color)
+        score_rect = score_surface.get_rect(topleft=(10, 10))
         surface.blit(score_surface, score_rect)
+
+        high_score_surface = self.font.render(f"High Score: {self.high_score}", True, self.color)
+        high_score_rect = high_score_surface.get_rect(topright=(590, 10))
+        surface.blit(high_score_surface, high_score_rect)
 
     def game_over(self, surface, snake, food):
         game_over_surface = self.font.render('GAME OVER', True, "red")
@@ -22,6 +26,8 @@ class Scoreboard:
         self.reset_game(snake, food)
 
     def reset_game(self, snake, food):
+        if self.score > self.high_score:
+            self.high_score = self.score
         self.score = 0
         snake.reset()
         food.reset()
